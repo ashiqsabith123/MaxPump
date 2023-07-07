@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"MaxPump/delivery/handlers"
+	"MAXPUMP1/pkg/api/handlers"
 
 	"github.com/gin-gonic/gin"
 )

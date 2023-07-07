@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -20,7 +19,8 @@ type MyClaims struct {
 const TokenExpireDuration = time.Hour * 2
 
 func GenToken(username string, c *gin.Context) (string, error) {
-	MySecretKEY := os.Getenv("MySecretKEY")
+	//MySecretKEY := os.Getenv("MySecretKEY")
+	MySecretKEY := "hello Hii"
 	// Create our own statement
 	claims := MyClaims{
 		Username: username, // Custom field

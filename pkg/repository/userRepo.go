@@ -4,6 +4,8 @@ import (
 	"MAXPUMP1/pkg/domain/entity"
 	"errors"
 
+	repo "MAXPUMP1/pkg/repository/interfaces"
+
 	"gorm.io/gorm"
 )
 
@@ -11,7 +13,7 @@ type UserRepository struct {
 	db *gorm.DB
 }
 
-func NewUserRepository(db *gorm.DB) *UserRepository {
+func NewUserRepository(db *gorm.DB) repo.UserInterface {
 	return &UserRepository{db: db}
 }
 

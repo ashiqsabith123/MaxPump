@@ -5,7 +5,7 @@ import (
 	"MAXPUMP1/pkg/db"
 	"MAXPUMP1/pkg/domain/entity"
 	"MAXPUMP1/pkg/model"
-	"MAXPUMP1/pkg/usecase"
+	use "MAXPUMP1/pkg/usecase/interfaces"
 	"fmt"
 	"net/http"
 
@@ -15,11 +15,11 @@ import (
 )
 
 type UserHandler struct {
-	UserUsecase *usecase.UserUsecase
+	UserUsecase use.UserUsecaseInterface
 }
 
-func NewUserHandler(UserUsecase *usecase.UserUsecase) *UserHandler {
-	return &UserHandler{UserUsecase}
+func NewUserHandler(UserUsecase use.UserUsecaseInterface) *UserHandler {
+	return &UserHandler{UserUsecase: UserUsecase}
 }
 
 func (uh *UserHandler) UserSignup(c *gin.Context) {
@@ -48,7 +48,7 @@ func (uh *UserHandler) SignupWithOtp(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	key, err := uh.UserUsecase.ExecuteSignupWithOtp()
+	key, err := uh.UserUsecase.ExecuteSignupWithOtp(user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -70,7 +70,7 @@ func (uh *UserHandler) SignupOtpValidation(c *gin.Context) {
 
 }
 
-func UserLogin(c *gin.Context) {
+func (uh *UserHandler) UserLogin(c *gin.Context) {
 	ok := middleware.ValidateCookie(c)
 
 	if !ok {
@@ -85,7 +85,7 @@ type Credentials struct {
 	Password string `json:"password"`
 }
 
-func LoginPost(c *gin.Context) {
+func (uh *UserHandler) LoginPost(c *gin.Context) {
 	// Parse and decode the request body into a `Credentials` struct
 	creds := &Credentials{}
 	if err := c.ShouldBindJSON(creds); err != nil {
@@ -122,7 +122,7 @@ func LoginPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Login successful"})
 }
 
-func UserLogout(c *gin.Context) {
+func (uh *UserHandler) UserLogout(c *gin.Context) {
 
 	err := middleware.DeleteCookie(c)
 	if err != nil {

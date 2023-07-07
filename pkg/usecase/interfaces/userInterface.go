@@ -5,7 +5,7 @@ import (
 	"MAXPUMP1/pkg/model"
 )
 
-type UserUsecase interface {
+type UserUsecaseInterface interface {
 	ExecuteSignup(user entity.User) (*entity.User, error)
 	ExecuteSignupWithOtp(user model.Signup) (string, error)
 	ExecuteSignupOtpValidation(key string, otp string) error

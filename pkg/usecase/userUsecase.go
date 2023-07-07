@@ -3,18 +3,20 @@ package usecase
 import (
 	"MAXPUMP1/pkg/domain/entity"
 	"MAXPUMP1/pkg/model"
-	"MAXPUMP1/pkg/repository"
+	repo "MAXPUMP1/pkg/repository/interfaces"
+	use "MAXPUMP1/pkg/usecase/interfaces"
 	"MAXPUMP1/pkg/utils"
+
 	"errors"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserUsecase struct {
-	userRepo *repository.UserRepository
+	userRepo repo.UserInterface
 }
 
-func NewUser(userRepo *repository.UserRepository) *UserUsecase {
+func NewUser(userRepo repo.UserInterface) use.UserUsecaseInterface {
 	return &UserUsecase{userRepo: userRepo}
 }
 
@@ -90,10 +92,10 @@ func (uu *UserUsecase) ExecuteSignupWithOtp(user model.Signup) (string, error) {
 	if err != nil {
 		return "", err
 	} else {
-		err = uu.userRepo.CreateSignup(&user)
+		//err = uu.userRepo.CreateSignup(&user)
 		otpKey.Key = key
 		otpKey.Phone = user.Phone
-		err = uu.userRepo.CreateOtpKey(&otpKey)
+		//err = uu.userRepo.CreateOtpKey(&otpKey)
 		if err != nil {
 			return "", err
 		}
@@ -102,32 +104,33 @@ func (uu *UserUsecase) ExecuteSignupWithOtp(user model.Signup) (string, error) {
 }
 
 func (uu *UserUsecase) ExecuteSignupOtpValidation(key string, otp string) error {
-	result, err := uu.userRepo.GetByKey(key)
-	if err != nil {
-		return err
-	}
-	user, err := uu.userRepo.GetSignupByPhone(result.Phone)
-	if err != nil {
-		return err
-	}
-	err = utils.CheckOtp(result.Phone, otp)
-	if err != nil {
-		return err
-	} else {
-		newUser := &entity.User{
-			FirstName: user.FirstName,
-			LastName:  user.LastName,
-			Email:     user.Email,
-			Phone:     user.Phone,
-			Password:  user.Password,
-		}
+	//result, err := uu.userRepo.GetByKey(key)
+	// if err != nil {
+	// 	return err
+	// }
+	// user, err := uu.userRepo.GetSignupByPhone(result.Phone)
+	// if err != nil {
+	// 	return err
+	// }
+	// err = utils.CheckOtp(result.Phone, otp)
+	// if err != nil {
+	// 	return err
+	// } else {
+	// 	newUser := &entity.User{
+	// 		FirstName: user.FirstName,
+	// 		LastName:  user.LastName,
+	// 		Email:     user.Email,
+	// 		Phone:     user.Phone,
+	// 		Password:  user.Password,
+	// 	}
 
-		err1 := uu.userRepo.Create(newUser)
-		if err1 != nil {
-			return err1
-		} else {
-			return nil
-		}
-	}
+	// 	err1 := uu.userRepo.Create(newUser)
+	// 	if err1 != nil {
+	// 		return err1
+	// 	} else {
+	// 		return nil
+	// 	}
+	// }
 
+	return nil
 }
