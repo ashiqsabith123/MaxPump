@@ -8,7 +8,7 @@ import (
 	"github.com/google/wire"
 )
  
-func InitilizeApi(){
+func InitializeApi(){
 	wire.Build(
 		db.ConnectDB,
 		repository.NewUserRepository,

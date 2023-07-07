@@ -1,12 +1,11 @@
 package handlers
 
 import (
-	"MaxPump/delivery/middleware"
-	"MaxPump/delivery/models"
-	"MaxPump/domain/entity"
-	"MaxPump/repository/infrastructure"
-	usecase "MaxPump/usecase/user"
-
+	"MAXPUMP1/pkg/api/middleware"
+	"MAXPUMP1/pkg/db"
+	"MAXPUMP1/pkg/domain/entity"
+	"MAXPUMP1/pkg/model"
+	"MAXPUMP1/pkg/usecase"
 	"fmt"
 	"net/http"
 
@@ -25,7 +24,7 @@ func NewUserHandler(UserUsecase *usecase.UserUsecase) *UserHandler {
 
 func (uh *UserHandler) UserSignup(c *gin.Context) {
 
-	var userInput models.Users
+	var userInput model.Users
 
 	if err := c.ShouldBindJSON(&userInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -44,7 +43,7 @@ func (uh *UserHandler) UserSignup(c *gin.Context) {
 }
 
 func (uh *UserHandler) SignupWithOtp(c *gin.Context) {
-	var user models.Signup
+	var user model.Signup
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -97,7 +96,7 @@ func LoginPost(c *gin.Context) {
 	enteredPassword := creds.Password
 
 	var storedPassword string
-	result := infrastructure.DB.Raw("SELECT password FROM users WHERE email = ?", creds.Email).Scan(&storedPassword)
+	result := db.DB.Raw("SELECT password FROM users WHERE email = ?", creds.Email).Scan(&storedPassword)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
 		return
