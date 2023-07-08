@@ -32,7 +32,9 @@ func (uh *UserHandler) UserSignup(c *gin.Context) {
 	}
 
 	var user entity.User
+
 	copier.Copy(&user, &userInput)
+	fmt.Println("user", user)
 	newUser, err := uh.UserUsecase.ExecuteSignup(user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

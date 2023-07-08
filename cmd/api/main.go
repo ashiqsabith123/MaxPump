@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+
 	handler := di.InitializeApi()
 
 	router := gin.Default()

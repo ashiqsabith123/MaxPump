@@ -6,6 +6,7 @@ import (
 	repo "MAXPUMP1/pkg/repository/interfaces"
 	use "MAXPUMP1/pkg/usecase/interfaces"
 	"MAXPUMP1/pkg/utils"
+	"fmt"
 
 	"errors"
 
@@ -21,6 +22,8 @@ func NewUser(userRepo repo.UserInterface) use.UserUsecaseInterface {
 }
 
 func (us *UserUsecase) ExecuteSignup(user entity.User) (*entity.User, error) {
+	fmt.Println("hello")
+	fmt.Println("sa", user)
 
 	email, err := us.userRepo.GetByEmail(user.Email) //call GetByEmail function to check the email is already exists or not
 	if err != nil {

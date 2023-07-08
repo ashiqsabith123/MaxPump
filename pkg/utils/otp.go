@@ -21,7 +21,7 @@ var (
 func init() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal("Error otp loading .env file")
 	}
 	TWILIO_ACCOUNT_SID = os.Getenv("KEY1")
 	TWILIO_AUTH_TOKEN = os.Getenv("KEY2")

@@ -32,7 +32,7 @@ func (ur *UserRepository) GetByID(id int) (*entity.User, error) {
 func (ur *UserRepository) GetByEmail(email string) (*entity.User, error) {
 
 	var user entity.User
-	result := ur.db.First(&user, email)
+	result := ur.db.Where("email=?", email).First(&user)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			return nil, nil
